@@ -28,14 +28,21 @@ public class EscribirCalificaciones {
 
             while ((linea = br.readLine()) != null) {
 
+                if (i >= calificaciones.length) {
+                    break;
+                }
+
+
                 String[] datos = linea.split(",");
 
-                System.out.print("Calificación para matrícula " + datos[0] + " (1-100): ");
+                System.out.print("Calificación para matrícula " + datos[0] + " (0-100)(0 = sin calificacion): ");
                 int cal = scanner.nextInt();
 
-                if (cal < 1 || cal > 100) {
-                    condicion = true;
+                if (cal < 0 || cal > 100) {
+                    calificaciones[i] = 0;  // FASE 3 → marca como S/C
                     break;
+                } else {
+                    calificaciones[i] = cal;
                 }
 
                 calificaciones[i] = cal;
@@ -47,12 +54,6 @@ public class EscribirCalificaciones {
             return null;
         }
 
-        if (condicion) {
-            System.out.println("No se ha generado el archivo");
-            return null;
-        }
-
         return calificaciones;
     }
 }
-

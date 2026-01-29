@@ -1,7 +1,3 @@
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.Scanner;
 
 public class Main {
@@ -26,6 +22,7 @@ public class Main {
             if (opcion == 1) {
                 registro.registrar();
             } else if (opcion == 2) {
+
                 System.out.print("Usuario: ");
                 String usuario = scanner.nextLine();
 
@@ -37,14 +34,13 @@ public class Main {
                     return;
                 }
                 break;
+
             } else if (opcion == 3) {
                 return;
             }
         }
 
-        String linea;
         LeerArchivo lector = new LeerArchivo();
-
         int totalAlumnos = lector.contarAlumnos("alumnos.csv");
 
         if (totalAlumnos == 0) {
@@ -56,29 +52,11 @@ public class Main {
         int[] calificaciones = ec.capturarCalificaciones();
 
         if (calificaciones == null) {
-            System.out.println("Proceso cancelado");
+            System.out.println("Proceso finalizado");
             return;
         }
 
-        int i = 0;
-        try (
-                BufferedReader br = new BufferedReader(new FileReader("alumnos.csv"));
-                FileWriter fw = new FileWriter("salida.csv")
-        ) {
-
-            br.readLine();
-            fw.write("Matricula,Asignatura,Calificacion\n");
-
-            while ((linea = br.readLine()) != null) {
-                String[] datos = linea.split(",");
-                fw.write(datos[0] + ",Diseño de software," + calificaciones[i] + "\n");
-                i++;
-            }
-
-            System.out.println("Archivo CSV generado");
-
-        } catch (IOException e) {
-            System.out.println("Error al generar archivo");
-        }
+        PDF pdf = new PDF("salida.pdf");
+        pdf.generarDesdeAlumnos("alumnos.csv", calificaciones);
     }
 }
