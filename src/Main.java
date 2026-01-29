@@ -57,6 +57,6 @@ public class Main {
         }
 
         PDF pdf = new PDF("salida.pdf");
-        pdf.generarDesdeAlumnos("alumnos.csv", calificaciones);
+        pdf.generarPDF("alumnos.csv", calificaciones);
     }
 }

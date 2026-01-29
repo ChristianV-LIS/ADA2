@@ -15,7 +15,7 @@ public class PDF {
         this.archivoPDF = archivoPDF;
     }
 
-    public void generarDesdeAlumnos(String archivoAlumnos, int[] calificaciones) {
+    public void generarPDF(String archivoAlumnos, int[] calificaciones) {
 
         String linea;
         int i = 0;
