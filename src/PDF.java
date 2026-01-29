@@ -9,47 +9,44 @@ import java.io.FileReader;
 
 public class PDF {
 
-    private String archivoPDF;
-
-    public PDF(String archivoPDF) {
-        this.archivoPDF = archivoPDF;
-    }
-
-    public void generarPDF(String archivoAlumnos, int[] calificaciones) {
-
-        String linea;
-        int i = 0;
+    public void generarPDFSinCSV(String archivoAlumnos, int[] calificaciones, String archivoPDF) {
 
         try (
-                BufferedReader br = new BufferedReader(new FileReader(archivoAlumnos));
-                FileOutputStream fos = new FileOutputStream(archivoPDF)
+                BufferedReader br = new BufferedReader(new FileReader(archivoAlumnos))
         ) {
 
             Document document = new Document();
-            PdfWriter.getInstance(document, fos);
+            PdfWriter.getInstance(document, new FileOutputStream(archivoPDF));
             document.open();
 
             document.add(new Paragraph("Reporte de Calificaciones\n\n"));
 
             PdfPTable tabla = new PdfPTable(3);
-            tabla.addCell("Matricula");
-            tabla.addCell("Asignatura");
-            tabla.addCell("Calificacion");
+            tabla.addCell("Matrícula");
+            tabla.addCell("Diseño de software");
+            tabla.addCell("Calificación");
 
             br.readLine();
 
-            while ((linea = br.readLine()) != null) {
+            String linea;
+            int i = 0;
+
+            while ((linea = br.readLine()) != null && i < calificaciones.length) {
 
                 if (linea.trim().isEmpty()) {
                     continue;
                 }
 
                 String[] datos = linea.split(",");
-                String calif = (calificaciones[i] == 0) ? "S/C" : String.valueOf(calificaciones[i]);
 
                 tabla.addCell(datos[0]);
                 tabla.addCell("Diseño de software");
-                tabla.addCell(calif);
+
+                if (calificaciones[i] == 0) {
+                    tabla.addCell("S/C");
+                } else {
+                    tabla.addCell(String.valueOf(calificaciones[i]));
+                }
 
                 i++;
             }
@@ -57,10 +54,11 @@ public class PDF {
             document.add(tabla);
             document.close();
 
-            System.out.println("PDF generado correctamente");
+            System.out.println("PDF generado");
 
         } catch (Exception e) {
             System.out.println("Error al generar PDF");
         }
     }
 }
+

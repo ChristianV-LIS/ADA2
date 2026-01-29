@@ -1,3 +1,7 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Scanner;
 
 public class Main {
@@ -22,7 +26,6 @@ public class Main {
             if (opcion == 1) {
                 registro.registrar();
             } else if (opcion == 2) {
-
                 System.out.print("Usuario: ");
                 String usuario = scanner.nextLine();
 
@@ -34,7 +37,6 @@ public class Main {
                     return;
                 }
                 break;
-
             } else if (opcion == 3) {
                 return;
             }
@@ -52,11 +54,56 @@ public class Main {
         int[] calificaciones = ec.capturarCalificaciones();
 
         if (calificaciones == null) {
-            System.out.println("Proceso finalizado");
+            System.out.println("Proceso cancelado");
             return;
         }
 
-        PDF pdf = new PDF("salida.pdf");
-        pdf.generarPDF("alumnos.csv", calificaciones);
+
+        boolean condicion = false;
+        for (int c : calificaciones) {
+            if (c == 0) {
+                condicion = true;
+                break;
+            }
+        }
+
+        PDF pdf = new PDF();
+
+        if (!condicion) {
+
+            try (
+                    BufferedReader br = new BufferedReader(new FileReader("alumnos.csv"));
+                    FileWriter fw = new FileWriter("salida.csv")
+            ) {
+
+                br.readLine();
+                fw.write("Matricula,Diseño de software,Calificación\n");
+
+                String linea;
+                int i = 0;
+
+                while ((linea = br.readLine()) != null) {
+                    if (linea.trim().isEmpty()) continue;
+
+                    String[] datos = linea.split(",");
+                    fw.write(datos[0] + ",Diseño de software," + calificaciones[i] + "\n");
+                    i++;
+                }
+
+                System.out.println("Archivo CSV generado");
+
+                pdf.generarPDFSinCSV("alumnos.csv", calificaciones, "salida.pdf");
+
+            } catch (IOException e) {
+                System.out.println("Error al generar el CSV");
+            }
+
+        }
+        else {
+            pdf.generarPDFSinCSV("alumnos.csv", calificaciones, "salida.pdf"
+            );
+
+            System.out.println("El CSV no ha sido generado (hay calificaciones en 0)");
+        }
     }
 }
