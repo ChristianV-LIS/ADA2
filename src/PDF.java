@@ -9,7 +9,7 @@ import java.io.FileReader;
 
 public class PDF {
 
-    public void generarPDFSinCSV(String archivoAlumnos, int[] calificaciones, String archivoPDF) {
+    public void generarPDF(String archivoAlumnos, int[] calificaciones, String archivoPDF) {
 
         try (
                 BufferedReader br = new BufferedReader(new FileReader(archivoAlumnos))

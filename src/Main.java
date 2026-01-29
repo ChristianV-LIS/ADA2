@@ -92,7 +92,7 @@ public class Main {
 
                 System.out.println("Archivo CSV generado");
 
-                pdf.generarPDFSinCSV("alumnos.csv", calificaciones, "salida.pdf");
+                pdf.generarPDF("alumnos.csv", calificaciones, "salida.pdf");
 
             } catch (IOException e) {
                 System.out.println("Error al generar el CSV");
@@ -100,7 +100,7 @@ public class Main {
 
         }
         else {
-            pdf.generarPDFSinCSV("alumnos.csv", calificaciones, "salida.pdf"
+            pdf.generarPDF("alumnos.csv", calificaciones, "salida.pdf"
             );
 
             System.out.println("El CSV no ha sido generado (hay calificaciones en 0)");
